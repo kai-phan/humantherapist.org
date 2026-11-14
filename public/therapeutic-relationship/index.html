@@ -73,23 +73,13 @@
       <p><strong>For the public:</strong> When people understand the value of the Therapeutic Relationship with a Human-Therapist, tech companies will have difficulty taking over the industry.</p>
     </article>
 
-    <!-- SAMPLE DATA: replace with Instagram posts of category "human" from the Zernio API -->
-    <section class="section section--dark" id="posts" aria-labelledby="posts-h">
+    <section class="section section--dark" id="posts" aria-labelledby="posts-h" data-posts data-category="human" data-limit="12" hidden>
       <div class="wrap">
         <div class="section-head section-head--light">
           <h2 id="posts-h">The Therapeutic Relationship on Instagram</h2>
-          <a class="more" href="#" rel="noopener">Follow on Instagram →</a>
+          <a class="more" data-ig href="#" target="_blank" rel="noopener noreferrer" hidden>Follow on Instagram →</a>
         </div>
-        <ul class="reels reels--grid">
-          <li><article class="reel"><div class="reel-cover r-blue"><span class="badge">Human-Therapist</span><span class="play" aria-hidden="true"></span><span class="dur">1:05</span><p class="reel-quote">The Therapeutic Relationship</p></div><p class="reel-cap">Licensed therapists explain what healing actually depends on.</p><span class="reel-meta">Nov 7 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-yellow"><span class="badge">Human-Therapist</span><span class="play" aria-hidden="true"></span><span class="dur">0:51</span><p class="reel-quote">Not always supposed to like your therapist</p></div><p class="reel-cap">Rupture and repair: why discomfort can be part of the work.</p><span class="reel-meta">Oct 29 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-black"><span class="badge">Human-Therapist</span><span class="play" aria-hidden="true"></span><span class="dur">0:44</span><p class="reel-quote">What is a Human-Therapist?</p></div><p class="reel-cap">Three commitments that define the work, whatever the modality.</p><span class="reel-meta">Oct 23 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-blue"><span class="badge">Human-Therapist</span><span class="play" aria-hidden="true"></span><span class="dur">0:38</span><p class="reel-quote">Learn how to repair</p></div><p class="reel-cap">Apologizing and accepting care are skills practiced with a real human.</p><span class="reel-meta">Oct 17 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-yellow"><span class="badge">Human-Therapist</span><span class="play" aria-hidden="true"></span><span class="dur">0:57</span><p class="reel-quote">Not a happy robot</p></div><p class="reel-cap">Humans aren’t perfect, and therapists aren’t supposed to be.</p><span class="reel-meta">Oct 11 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-black"><span class="badge">Human-Therapist</span><span class="play" aria-hidden="true"></span><span class="dur">1:12</span><p class="reel-quote">Why it takes two people</p></div><p class="reel-cap">The relationship itself is the contained space where change happens.</p><span class="reel-meta">Oct 5 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-blue"><span class="badge">Human-Therapist</span><span class="play" aria-hidden="true"></span><span class="dur">0:33</span><p class="reel-quote">For the public</p></div><p class="reel-cap">What to look for when you choose a Human-Therapist.</p><span class="reel-meta">Sep 28 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-yellow"><span class="badge">Human-Therapist</span><span class="play" aria-hidden="true"></span><span class="dur">0:49</span><p class="reel-quote">For providers</p></div><p class="reel-cap">Join therapists keeping therapy human. No fees, no dues.</p><span class="reel-meta">Sep 22 · Reel</span></article></li>
-        </ul>
+        <ul class="reels reels--grid" data-posts-list></ul>
       </div>
     </section>
 
@@ -108,5 +98,6 @@
       <p>© 2026 Human-Therapist.org</p>
     </div>
   </footer>
+  <script src="/posts.js" defer></script>
 </body>
 </html>

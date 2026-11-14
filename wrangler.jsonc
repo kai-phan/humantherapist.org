@@ -1,16 +1,18 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "human-therapist-landing",
+  "name": "human-therapist",
+  "main": "src/worker.js",
   "compatibility_date": "2026-11-01",
   "assets": {
     "directory": "./public",
+    "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/api/*"]
   },
-  "routes": [
-    {
-      "custom_domain": true,
-      "pattern": "human-therapist.org"
-    }
-  ]
+  "observability": { "enabled": true },
+  "vars": {
+    // Public Instagram profile URL, e.g. "https://www.instagram.com/<handle>/". Empty hides the "Follow" links.
+    "INSTAGRAM_URL": "https://www.instagram.com/humantherapistorg/"
+  }
 }

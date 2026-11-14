@@ -63,23 +63,13 @@
       <p>I wish there were a silver bullet to make therapy affordable, but Silicon Valley doesn’t have that solution. Its sudden appearance in the mental health industry has nothing to do with enhancing the Therapeutic Relationship. It takes advantage of the normalization of going to therapy and redefines therapy to sell products that fit its definition.</p>
     </article>
 
-    <!-- SAMPLE DATA: replace with Instagram posts of category "ai" from the Zernio API -->
-    <section class="section section--dark" id="posts" aria-labelledby="posts-h">
+    <section class="section section--dark" id="posts" aria-labelledby="posts-h" data-posts data-category="ai" data-limit="12" hidden>
       <div class="wrap">
         <div class="section-head section-head--light">
           <h2 id="posts-h">AI Harms on Instagram</h2>
-          <a class="more" href="#" rel="noopener">Follow on Instagram →</a>
+          <a class="more" data-ig href="#" target="_blank" rel="noopener noreferrer" hidden>Follow on Instagram →</a>
         </div>
-        <ul class="reels reels--grid">
-          <li><article class="reel"><div class="reel-cover r-red"><span class="badge">AI Harms</span><span class="play" aria-hidden="true"></span><span class="dur">0:42</span><p class="reel-quote">Human Therapists REPLACED by AI?</p></div><p class="reel-cap">Why a chatbot can’t give you the one thing therapy runs on.</p><span class="reel-meta">Nov 10 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-purple"><span class="badge">AI Harms</span><span class="play" aria-hidden="true"></span><span class="dur">0:28</span><p class="reel-quote">“Therapy” from a subscription?</p></div><p class="reel-cap">What “therapy platforms” sell, and what they leave out.</p><span class="reel-meta">Nov 3 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-black"><span class="badge">AI Harms</span><span class="play" aria-hidden="true"></span><span class="dur">0:36</span><p class="reel-quote">What is ChatGPT used for most?</p></div><p class="reel-cap">The answer is therapy. Here is why that should worry us.</p><span class="reel-meta">Oct 30 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-red"><span class="badge">AI Harms</span><span class="play" aria-hidden="true"></span><span class="dur">0:19</span><p class="reel-quote">Therapists as gig workers</p></div><p class="reel-cap">Licensed, replaceable, and not in the company’s long-term plan.</p><span class="reel-meta">Oct 24 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-purple"><span class="badge">AI Harms</span><span class="play" aria-hidden="true"></span><span class="dur">0:47</span><p class="reel-quote">Not a product on demand</p></div><p class="reel-cap">Human-Therapists are not available 24/7 like a streaming service.</p><span class="reel-meta">Oct 18 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-black"><span class="badge">AI Harms</span><span class="play" aria-hidden="true"></span><span class="dur">1:02</span><p class="reel-quote">Who is accountable?</p></div><p class="reel-cap">When a tech company hires a license, who answers for the care?</p><span class="reel-meta">Oct 12 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-red"><span class="badge">AI Harms</span><span class="play" aria-hidden="true"></span><span class="dur">0:31</span><p class="reel-quote">15-minute “sessions”</p></div><p class="reel-cap">Minimal face time is a business model, not a treatment plan.</p><span class="reel-meta">Oct 6 · Reel</span></article></li>
-          <li><article class="reel"><div class="reel-cover r-purple"><span class="badge">AI Harms</span><span class="play" aria-hidden="true"></span><span class="dur">0:54</span><p class="reel-quote">Search “therapy” on Google</p></div><p class="reel-cap">Read the top results. Count how many are technology companies.</p><span class="reel-meta">Sep 29 · Reel</span></article></li>
-        </ul>
+        <ul class="reels reels--grid" data-posts-list></ul>
       </div>
     </section>
 
@@ -98,5 +88,6 @@
       <p>© 2026 Human-Therapist.org</p>
     </div>
   </footer>
+  <script src="/posts.js" defer></script>
 </body>
 </html>

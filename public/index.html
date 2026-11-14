@@ -131,64 +131,13 @@
       </div>
     </section>
 
-    <!-- SAMPLE DATA: replace with posts from the Zernio API (category + thumbnail + caption + link) -->
-    <section class="section section--dark" id="watch" aria-labelledby="watch-h">
+    <section class="section section--dark" id="watch" aria-labelledby="watch-h" data-posts data-category="all" data-limit="4" hidden>
       <div class="wrap">
         <div class="section-head section-head--light">
-          <h2 id="watch-h">Watch</h2>
-          <a class="more" href="/ai-harms/">See all posts →</a>
+          <h2 id="watch-h">Watch on Instagram</h2>
+          <a class="more" data-ig href="#" target="_blank" rel="noopener noreferrer" hidden>Follow on Instagram →</a>
         </div>
-
-        <ul class="reels">
-          <li>
-            <article class="reel">
-              <div class="reel-cover r-red">
-                <span class="badge">AI Harms</span>
-                <span class="play" aria-hidden="true"></span>
-                <span class="dur">0:42</span>
-                <p class="reel-quote">Human Therapists REPLACED by AI?</p>
-              </div>
-              <p class="reel-cap">Why a chatbot can’t give you the one thing therapy runs on.</p>
-              <span class="reel-meta">Nov 10 · Reel</span>
-            </article>
-          </li>
-          <li>
-            <article class="reel">
-              <div class="reel-cover r-blue">
-                <span class="badge">Human-Therapist</span>
-                <span class="play" aria-hidden="true"></span>
-                <span class="dur">1:05</span>
-                <p class="reel-quote">The Therapeutic Relationship</p>
-              </div>
-              <p class="reel-cap">Licensed therapists explain what healing actually depends on.</p>
-              <span class="reel-meta">Nov 7 · Reel</span>
-            </article>
-          </li>
-          <li>
-            <article class="reel">
-              <div class="reel-cover r-purple">
-                <span class="badge">AI Harms</span>
-                <span class="play" aria-hidden="true"></span>
-                <span class="dur">0:28</span>
-                <p class="reel-quote">“Therapy” from a subscription?</p>
-              </div>
-              <p class="reel-cap">What “therapy platforms” sell, and what they leave out.</p>
-              <span class="reel-meta">Nov 3 · Reel</span>
-            </article>
-          </li>
-          <li>
-            <article class="reel">
-              <div class="reel-cover r-yellow">
-                <span class="badge">Human-Therapist</span>
-                <span class="play" aria-hidden="true"></span>
-                <span class="dur">0:51</span>
-                <p class="reel-quote">Not always supposed to like your therapist</p>
-              </div>
-              <p class="reel-cap">Rupture and repair: why discomfort can be part of the work.</p>
-              <span class="reel-meta">Oct 29 · Reel</span>
-            </article>
-          </li>
-        </ul>
+        <ul class="reels" data-posts-list></ul>
       </div>
     </section>
 
@@ -218,5 +167,6 @@
       <p>© 2026 Human-Therapist.org</p>
     </div>
   </footer>
+  <script src="/posts.js" defer></script>
 </body>
 </html>

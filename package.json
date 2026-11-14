@@ -1,9 +1,11 @@
 {
   "name": "human-therapist",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "wrangler dev --port 8787",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "test": "node --test test/*.test.js"
   },
   "devDependencies": {
     "wrangler": "^4"
