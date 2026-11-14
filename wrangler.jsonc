@@ -1,10 +1,16 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "human-therapist",
+  "name": "human-therapist-landing",
   "compatibility_date": "2026-11-01",
   "assets": {
     "directory": "./public",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
-  }
+  },
+  "routes": [
+    {
+      "custom_domain": true,
+      "pattern": "human-therapist.org/*"
+    }
+  ]
 }
