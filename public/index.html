@@ -131,13 +131,19 @@
       </div>
     </section>
 
-    <section class="section section--dark" id="watch" aria-labelledby="watch-h" data-posts data-category="all" data-limit="4" hidden>
+    <section class="section section--dark" id="watch" aria-labelledby="watch-h" data-posts data-category="all" data-limit="12" hidden>
       <div class="wrap">
         <div class="section-head section-head--light">
           <h2 id="watch-h">Watch on Instagram</h2>
-          <a class="more" data-ig href="#" target="_blank" rel="noopener noreferrer" hidden>Follow on Instagram →</a>
+          <div class="head-actions">
+            <a class="more" data-ig href="#" target="_blank" rel="noopener noreferrer" hidden>Follow on Instagram →</a>
+            <div class="slider-nav" data-slider-nav hidden>
+              <button type="button" class="slider-btn" data-prev aria-label="Previous videos">‹</button>
+              <button type="button" class="slider-btn" data-next aria-label="Next videos">›</button>
+            </div>
+          </div>
         </div>
-        <ul class="reels" data-posts-list></ul>
+        <ul class="reels reels--slider" data-posts-list tabindex="0" role="region" aria-roledescription="carousel" aria-labelledby="watch-h"></ul>
       </div>
     </section>
 

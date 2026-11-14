@@ -108,6 +108,16 @@ a { color: inherit; }
 .reel-cover.has-img .badge { z-index: 1; }
 .reel-meta { color: #9a9aa3; font-size: .85rem; }
 
+/* Slider */
+.head-actions { display: flex; align-items: center; gap: 1.2rem; }
+.slider-nav { display: flex; gap: .5rem; }
+.slider-btn { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--yellow); color: #000; font-size: 1.7rem; line-height: 1; display: grid; place-items: center; padding: 0 0 .15rem; cursor: pointer; }
+.slider-btn:hover:not(:disabled) { background: #ffdc5c; }
+.slider-btn:disabled { opacity: .3; cursor: default; }
+.reels.reels--slider { display: flex; gap: 1.4rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: .2rem; }
+.reels.reels--slider::-webkit-scrollbar { display: none; }
+.reels--slider > li { flex: 0 0 calc((100% - 3 * 1.4rem) / 4); scroll-snap-align: start; }
+
 /* Join */
 .join { background: var(--yellow); color: #000; }
 .join .wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2.5rem; align-items: center; }
@@ -147,6 +157,7 @@ a { color: inherit; }
 @media (max-width: 900px) {
   .reels { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 62%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: .8rem; -webkit-overflow-scrolling: touch; }
   .reels > li { scroll-snap-align: start; }
+  .reels--slider > li { flex-basis: calc((100% - 2 * 1.4rem) / 3); }
   .reels--grid { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(2, 1fr); overflow: visible; scroll-snap-type: none; }
   .rings { grid-template-columns: 1fr; }
   .grid { grid-template-columns: repeat(2, 1fr); }
@@ -157,6 +168,9 @@ a { color: inherit; }
 @media (max-width: 600px) {
   .nav a:not(.btn-join) { display: none; }
   .grid { grid-template-columns: 1fr; }
+  .reels--slider > li { flex-basis: 62%; }
+  .head-actions { gap: .8rem; }
+  .slider-btn { width: 36px; height: 36px; }
   .card--feature { grid-column: auto; }
   .ring { min-height: 280px; border-width: 9px; }
 }
