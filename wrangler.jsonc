@@ -10,7 +10,7 @@
   "routes": [
     {
       "custom_domain": true,
-      "pattern": "human-therapist.org/*"
+      "pattern": "human-therapist.org"
     }
   ]
 }
