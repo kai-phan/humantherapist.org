@@ -8,11 +8,16 @@
     "binding": "ASSETS",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": ["/api/*", "/media/*", "/videos", "/videos/*", "/sitemap.xml"]
   },
+  // Hosted videos, posters and the video index. Create it once:
+  //   npx wrangler r2 bucket create human-therapist-videos
+  "r2_buckets": [{ "binding": "VIDEOS", "bucket_name": "human-therapist-videos" }],
+  // Copies new Instagram videos from Zernio into R2 every 15 minutes.
+  "triggers": { "crons": ["*/15 * * * *"] },
   "observability": { "enabled": true },
   "vars": {
-    // Public Instagram profile URL, e.g. "https://www.instagram.com/<handle>/". Empty hides the "Follow" links.
+    // Public Instagram profile URL. Empty hides the "Follow" links.
     "INSTAGRAM_URL": "https://www.instagram.com/humantherapistorg/"
   }
 }

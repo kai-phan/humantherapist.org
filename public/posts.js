@@ -1,8 +1,5 @@
 (() => {
-  const LABEL = { ai: "AI Harms", human: "Human-Therapist" };
-  const COVERS = { ai: ["r-red", "r-purple", "r-black"], human: ["r-blue", "r-yellow", "r-black"] };
-  const KIND = { reel: "Reel", video: "Video", carousel: "Carousel", post: "Post" };
-  const fmt = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const LABEL = { ai: "AI Harm", human: "Human-Therapist" };
 
   const el = (tag, cls, text) => {
     const n = document.createElement(tag);
@@ -11,43 +8,36 @@
     return n;
   };
 
-  function card(post, requested, index) {
-    const cat = requested === "all" ? post.categories[0] : requested;
+  function card(post) {
+    const cat = post.category;
     const a = el("a", "reel");
     a.href = post.url;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
 
-    const cover = el("div", `reel-cover ${post.thumb ? "has-img" : COVERS[cat][index % 3]}`);
+    const cover = el("div", `reel-cover ${post.thumb ? "has-img" : `r-${cat}`}`);
+    const fallback = () => {
+      cover.classList.remove("has-img");
+      cover.classList.add(`r-${cat}`);
+      cover.prepend(el("p", "reel-quote", post.title.slice(0, 70)));
+    };
     if (post.thumb) {
       const img = el("img");
       img.src = post.thumb;
       img.alt = "";
       img.loading = "lazy";
-      img.referrerPolicy = "no-referrer";
       img.addEventListener("error", () => {
         img.remove();
-        cover.classList.remove("has-img");
-        cover.classList.add(COVERS[cat][index % 3]);
-        cover.prepend(el("p", "reel-quote", post.caption.slice(0, 70)));
+        fallback();
       });
       cover.append(img);
     } else {
-      cover.append(el("p", "reel-quote", post.caption.slice(0, 70)));
+      cover.append(el("p", "reel-quote", post.title.slice(0, 70)));
     }
-    cover.append(el("span", "badge", LABEL[cat]));
-    if (post.type === "reel" || post.type === "video") {
-      const play = el("span", "play");
-      play.setAttribute("aria-hidden", "true");
-      cover.append(play);
-    }
+    cover.append(el("span", `badge badge--${cat}`, LABEL[cat]));
+    const play = el("span", "play");
+    play.setAttribute("aria-hidden", "true");
+    cover.append(play);
 
-    const date = post.date ? fmt.format(new Date(post.date)) : "";
-    a.append(
-      cover,
-      el("p", "reel-cap", post.caption || "View on Instagram"),
-      el("span", "reel-meta", [date, KIND[post.type]].filter(Boolean).join(" · ")),
-    );
+    a.append(cover, el("p", "reel-cap", post.title));
     const li = el("li");
     li.append(a);
     return li;
@@ -82,7 +72,7 @@
       if (!res.ok) return;
       const { posts, profileUrl } = await res.json();
       if (!posts || !posts.length) return;
-      list.replaceChildren(...posts.map((p, i) => card(p, category, i)));
+      list.replaceChildren(...posts.map(card));
       section.querySelectorAll("[data-ig]").forEach((a) => {
         if (profileUrl) {
           a.href = profileUrl;
