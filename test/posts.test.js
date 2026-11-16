@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { classify, shortcode, toVideo, present, buildList, filterByCategory } from "../src/posts.js";
 
-const TAGS = { ai: ["aitherapy", "chatgpt"], human: ["keeptherapyhuman"] };
+const AI = "aiharms";
 const zernio = (over = {}) => ({
   _id: "65f1",
   origin: "external",
@@ -16,30 +16,23 @@ const zernio = (over = {}) => ({
 });
 const entry = (id, caption, over = {}) => ({ id, slug: id.toLowerCase(), caption, poster: true, bytes: 1, publishedAt: "2026-01-01T00:00:00Z", ...over });
 
-test("classify matches hashtags case-insensitively, not partial words", () => {
-  assert.deepEqual(classify("x #AITherapy", null, {}, TAGS, "human"), ["ai"]);
-  assert.deepEqual(classify("x #KeepTherapyHuman", null, {}, TAGS, "human"), ["human"]);
-  assert.deepEqual(classify("#aitherapyfoo aitherapy", null, {}, TAGS, "human"), []);
+test("only a video with #aiharms is AI Therapy?; every other video is Human-Therapist", () => {
+  assert.deepEqual(classify("x #AIHarms", null, {}, AI), ["ai"]);
+  assert.deepEqual(classify("x #aiharms #keeptherapyhuman", null, {}, AI), ["ai"]);
+  assert.deepEqual(classify("x #aitherapy #chatgpt", null, {}, AI), ["human"]);
+  assert.deepEqual(classify("no tags at all", null, {}, AI), ["human"]);
+  assert.deepEqual(classify("x #humantherapist", null, {}, AI), ["human"]);
 });
 
-test("classify sends a video matching both lists to the tie-break category", () => {
-  assert.deepEqual(classify("#aitherapy #keeptherapyhuman", null, {}, TAGS, "human"), ["human"]);
-  assert.deepEqual(classify("#aitherapy #keeptherapyhuman", null, {}, TAGS, "ai"), ["ai"]);
-});
-
-test("an explicit tag decides the category even when fallback tags disagree", () => {
-  const EXPLICIT = { ai: ["aiharms"], human: ["humantherapist"] };
-  assert.deepEqual(classify("#AIHarms #keeptherapyhuman", null, {}, TAGS, "human", EXPLICIT), ["ai"]);
-  assert.deepEqual(classify("#humantherapist #aitherapy", null, {}, TAGS, "ai", EXPLICIT), ["human"]);
-  assert.deepEqual(classify("#aiharms #humantherapist", null, {}, TAGS, "human", EXPLICIT), ["human"]);
-  assert.deepEqual(classify("#keeptherapyhuman", null, {}, TAGS, "human", EXPLICIT), ["human"]);
-  assert.deepEqual(classify("#aiharmsfoo", null, {}, TAGS, "human", EXPLICIT), []);
+test("the AI tag must match the whole hashtag", () => {
+  assert.deepEqual(classify("#aiharmsfoo aiharms", null, {}, AI), ["human"]);
 });
 
 test("overrides win over hashtags", () => {
-  assert.deepEqual(classify("#aitherapy", "ABC", { ABC: "human" }, TAGS, "human"), ["human"]);
-  assert.deepEqual(classify("#aitherapy", "ABC", { ABC: "hide" }, TAGS, "human"), []);
-  assert.deepEqual(classify("nothing", "ABC", { ABC: "both" }, TAGS, "human"), ["ai", "human"]);
+  assert.deepEqual(classify("#aiharms", "ABC", { ABC: "human" }, AI), ["human"]);
+  assert.deepEqual(classify("plain", "ABC", { ABC: "ai" }, AI), ["ai"]);
+  assert.deepEqual(classify("#aiharms", "ABC", { ABC: "hide" }, AI), []);
+  assert.deepEqual(classify("nothing", "ABC", { ABC: "both" }, AI), ["ai", "human"]);
 });
 
 test("shortcode extracts from post, reel and tv URLs", () => {
@@ -67,22 +60,22 @@ test("toVideo rejects stories, images, unpublished, empty captions and non-https
 });
 
 test("present builds the public shape: Therapy capitalized, no Instagram URL", () => {
-  const p = present(entry("AAA111", "What makes therapy work? The relationship. #aitherapy", { slug: "what-makes-therapy-work" }));
+  const p = present(entry("AAA111", "What makes therapy work? The relationship. #aiharms", { slug: "what-makes-therapy-work" }));
   assert.equal(p.title, "What makes Therapy work?");
   assert.deepEqual(p.body, ["The relationship."]);
   assert.equal(p.url, "/videos/what-makes-therapy-work/");
   assert.equal(p.thumb, "/media/AAA111.jpg");
   assert.equal(p.video, "/media/AAA111.mp4");
   assert.ok(!JSON.stringify(p).includes("instagram.com"));
-  assert.equal(present(entry("BBB222", "no tags")), null);
-  assert.equal(present(entry("CCC333", "#aitherapy x", { poster: false })).thumb, "");
+  assert.deepEqual(present(entry("BBB222", "No tags here.")).categories, ["human"]);
+  assert.equal(present(entry("CCC333", "Text. #aiharms", { poster: false })).thumb, "");
 });
 
 test("buildList sorts newest first; filterByCategory filters and limits", () => {
   const list = buildList([
-    entry("AAA111", "One. #aitherapy", { publishedAt: "2026-01-01T00:00:00Z" }),
-    entry("BBB222", "Two. #aitherapy", { publishedAt: "2026-03-01T00:00:00Z" }),
-    entry("CCC333", "Three. #keeptherapyhuman", { publishedAt: "2026-02-01T00:00:00Z" }),
+    entry("AAA111", "One. #aiharms", { publishedAt: "2026-01-01T00:00:00Z" }),
+    entry("BBB222", "Two. #aiharms", { publishedAt: "2026-03-01T00:00:00Z" }),
+    entry("CCC333", "Three.", { publishedAt: "2026-02-01T00:00:00Z" }),
   ]);
   assert.deepEqual(list.map((v) => v.id), ["BBB222", "CCC333", "AAA111"]);
   assert.deepEqual(filterByCategory(list, "human", 10).map((v) => v.id), ["CCC333"]);

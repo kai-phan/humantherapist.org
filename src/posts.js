@@ -1,4 +1,4 @@
-import { EXPLICIT, TAGS, OVERRIDES, TIE_BREAK } from "./config.js";
+import { AI_TAG, OVERRIDES } from "./config.js";
 import { hashtagSet, splitCaption, brand } from "./text.js";
 
 const SHORTCODE_RE = /\/(?:p|reel|reels|tv)\/([A-Za-z0-9_-]+)/;
@@ -16,23 +16,16 @@ const httpsUrl = (u) => {
   }
 };
 
-const match = (found, lists) => Object.keys(lists).filter((cat) => lists[cat].some((t) => found.has(t)));
-
 /**
- * Returns an array of "ai" / "human", or [] when the video should not be shown.
- * Order: manual override, then explicit tags (#aiharms ...), then the fallback tag lists.
+ * Returns the categories of a video: ["ai"] when the caption has the AI hashtag, otherwise ["human"].
+ * A manual override (by Instagram shortcode) wins: "ai" | "human" | "both" | "hide".
  */
-export function classify(caption, code, overrides = OVERRIDES, tags = TAGS, tieBreak = TIE_BREAK, explicit = EXPLICIT) {
+export function classify(caption, code, overrides = OVERRIDES, aiTag = AI_TAG) {
   const o = code && overrides[code];
   if (o === "hide") return [];
   if (o === "both") return ["ai", "human"];
   if (o === "ai" || o === "human") return [o];
-  const found = hashtagSet(caption);
-  for (const lists of [explicit, tags]) {
-    const hits = match(found, lists);
-    if (hits.length) return hits.length > 1 ? [tieBreak] : hits;
-  }
-  return [];
+  return hashtagSet(caption).has(aiTag) ? ["ai"] : ["human"];
 }
 
 /**

@@ -1,25 +1,63 @@
 // Editable settings. No secrets belong in this file.
 
-// A video goes to a category by the hashtags in its Instagram caption (case-insensitive, without the "#").
-// EXPLICIT tags are the ones the client adds on purpose and always decide the category.
-export const EXPLICIT = {
-  ai: ["aiharms"],
-  human: ["humantherapist", "therapeuticrelationship"],
-};
-// TAGS are the fallback for older posts that do not have an explicit tag yet.
-// Based on the hashtags used on @humantherapistorg.
-export const TAGS = {
-  ai: ["aitherapy", "chatgpt", "chatbot", "antiai", "aiandmentalhealth", "aiinhealthcare", "openai", "anthropic"],
-  human: ["keeptherapyhuman", "humanconnectionheals", "humanshelpinghumans", "realtherapy"],
-};
-
-// When a video matches both categories at the same level, it is shown only in this category.
-export const TIE_BREAK = "human";
+// A video is "AI Therapy?" only when its Instagram caption contains this hashtag (case-insensitive, no "#").
+// Every other video is "Human-Therapist".
+export const AI_TAG = "aiharms";
 
 // Manual overrides, keyed by the Instagram shortcode (instagram.com/reel/<SHORTCODE>/).
 // Takes priority over hashtags. Values: "ai" | "human" | "both" | "hide"
+//
+// The "ai" entries below are the reels that carry #aiharms on Instagram but whose caption Zernio has not
+// refreshed (Zernio keeps the caption it first imported for older posts). Regenerate the list with
+// `node scripts/scan-instagram-tags.mjs` after the client tags more reels. Reels tagged after the
+// scan are picked up from Zernio automatically.
 export const OVERRIDES = {
-  // "C1a2B3c4D5e": "ai",
+  "DfxQcyWhdvi": "ai",
+  "Dflk8NLBRq6": "ai",
+  "DffHqYwhnH_": "ai",
+  "DfXL4RLh3Fh": "ai",
+  "DfRgUvEh658": "ai",
+  "DfO0aVtB8bx": "ai",
+  "DfM7dK7hILt": "ai",
+  "DfE7YSbB0T2": "ai",
+  "De_4yx_hdB9": "ai",
+  "De3RXudB6SJ": "ai",
+  "De14ySpBede": "ai",
+  "DehZv9ThKD2": "ai",
+  "DegdWftB3P8": "ai",
+  "Dee1MtLBf0T": "ai",
+  "DecF8d1hLga": "ai",
+  "DeUj_EDBqcK": "ai",
+  "DeS1s3XhuaZ": "ai",
+  "DePQwlXB9X9": "ai",
+  "DdjgQg_humU": "ai",
+  "DdblZf8hIbd": "ai",
+  "DdbkifmBk1v": "ai",
+  "DdWzm7WB8s0": "ai",
+  "DdSbeyDhIVV": "ai",
+  "DdK0YXGB1QM": "ai",
+  "DdEdBy9hSZo": "ai",
+  "Dc_Ql15hZfv": "ai",
+  "Dc6Sz3dB1af": "ai",
+  "Dc41CSQhY3l": "ai",
+  "Dc1B_xHByu1": "ai",
+  "DcoL-VwhuOR": "ai",
+  "DclunDnBmdK": "ai",
+  "DckgaulhDpu": "ai",
+  "DceFF9yB-QX": "ai",
+  "DcXvUhshXKX": "ai",
+  "DcTmx41BLnu": "ai",
+  "Db8nHx3BLZU": "ai",
+  "Dbw79T3B3Rr": "ai",
+  "DbbGJOwhNfz": "ai",
+  "DbFMK2UhMBH": "ai",
+  "DalGcaJBh9_": "ai",
+  "DZiJEQUhgqh": "ai",
+  "DZXzkFHhID2": "ai",
+  "DZSQ5IGhhTv": "ai",
+  "DZISwEChrw_": "ai",
+  "DY-PHiThPOL": "ai",
+  "DXzUJjRBGk2": "ai",
 };
 
 // Public labels. Red label = AI, blue label = Human.
