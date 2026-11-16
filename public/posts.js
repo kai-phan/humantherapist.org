@@ -1,5 +1,5 @@
 (() => {
-  const LABEL = { ai: "AI Harm", human: "Human-Therapist" };
+  const LABEL = { ai: "AI Therapy?", human: "Human-Therapist" };
 
   const el = (tag, cls, text) => {
     const n = document.createElement(tag);
@@ -43,26 +43,6 @@
     return li;
   }
 
-  function slider(section, list) {
-    const nav = section.querySelector("[data-slider-nav]");
-    if (!nav) return;
-    const prev = nav.querySelector("[data-prev]");
-    const next = nav.querySelector("[data-next]");
-    const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const update = () => {
-      const max = list.scrollWidth - list.clientWidth;
-      nav.hidden = max <= 4;
-      prev.disabled = list.scrollLeft <= 4;
-      next.disabled = list.scrollLeft >= max - 4;
-    };
-    const go = (dir) => list.scrollBy({ left: dir * list.clientWidth, behavior: smooth ? "smooth" : "auto" });
-    prev.addEventListener("click", () => go(-1));
-    next.addEventListener("click", () => go(1));
-    list.addEventListener("scroll", update, { passive: true });
-    addEventListener("resize", update);
-    update();
-  }
-
   async function init(section) {
     const category = section.dataset.category || "all";
     const limit = section.dataset.limit || "12";
@@ -80,7 +60,7 @@
         }
       });
       section.hidden = false;
-      slider(section, list);
+      if (window.HT) window.HT.slider(section, list);
     } catch {
       /* leave the section hidden */
     }

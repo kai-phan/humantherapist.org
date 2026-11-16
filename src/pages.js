@@ -1,5 +1,5 @@
-import { LABELS, SITE } from "./config.js";
-import { esc, jsonForScript, truncate } from "./text.js";
+import { LABELS, SITE, IG_HANDLE } from "./config.js";
+import { esc, jsonForScript, truncate, isKeywordList } from "./text.js";
 
 const CATEGORY_PAGE = { ai: "/ai-harms/", human: "/therapeutic-relationship/" };
 
@@ -7,9 +7,9 @@ const HEADER = `  <header class="site-header">
     <div class="wrap">
       <a class="brand" href="/" aria-label="Human-Therapist.org home"><img src="/assets/logo.jpg" alt="Human Therapist" width="165" height="46"></a>
       <nav class="nav" aria-label="Main">
-        <a href="/therapeutic-relationship/">The Therapeutic Relationship</a>
-        <a href="/ai-harms/">AI Harms</a>
-        <a class="btn-join" href="/#join">Join</a>
+        <a href="/ai-harms/">🤖 AI Therapy?</a>
+        <a href="/therapeutic-relationship/">The Therapeutic Relationship ❤️</a>
+        <a class="btn-join" href="/#join">For Therapists</a>
       </nav>
     </div>
   </header>`;
@@ -32,7 +32,9 @@ function relatedCard(v) {
   return `<li><a class="reel" href="${esc(v.url)}">${cover}<p class="reel-cap">${esc(v.title)}</p></a></li>`;
 }
 
-export function renderVideoPage(v, related) {
+const IG_MENTION = new RegExp(`@${IG_HANDLE}\\b`, "gi");
+
+export function renderVideoPage(v, related, igUrl = `https://www.instagram.com/${IG_HANDLE}/`) {
   const cat = primary(v);
   const label = LABELS[cat];
   const pageUrl = `${SITE}${v.url}`;
@@ -48,7 +50,11 @@ export function renderVideoPage(v, related) {
     ...(v.publishedAt ? { uploadDate: v.publishedAt } : {}),
     publisher: { "@type": "Organization", name: "Human-Therapist.org", url: SITE },
   };
-  const paras = v.body.map((p) => `<p>${esc(p)}</p>`).join("\n          ");
+  const link = (html) =>
+    html.replace(IG_MENTION, (m) => `<a href="${esc(igUrl)}" target="_blank" rel="noopener noreferrer">${m}</a>`);
+  const paras = v.body
+    .map((p) => `<p${isKeywordList(p) ? ' class="vtags"' : ""}>${link(esc(p))}</p>`)
+    .join("\n          ");
 
   return `<!doctype html>
 <html lang="en">

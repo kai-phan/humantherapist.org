@@ -16,15 +16,38 @@ export function brand(text, redact = REDACT) {
     .trim();
 }
 
-/** Removes hashtags and normalizes whitespace, keeping paragraph breaks. */
+const SEPARATOR_LINE = /^[\s.·•]*$/; // blank lines and Instagram's "." spacer lines
+const ROBOT_LINE = /^🤖\s*(?:[“"]?AI[”"]?\s+)?ChatBots\s+vs\b/iu;
+export const isKeywordList = (text) => (String(text).match(/\|/g) || []).length >= 2;
+
+/**
+ * Removes hashtags and normalizes whitespace. Paragraph breaks come from blank lines and "." spacer lines.
+ * The "🤖 ChatBots vs Human-Therapist" line and "a | b | c" keyword lines always get their own paragraph.
+ * Other single line breaks are Instagram's hard wraps and are joined.
+ */
 export function cleanCaption(caption) {
-  return String(caption || "")
-    .replace(/\r/g, "")
-    .replace(HASHTAG_RE, "")
-    .split(/\n{2,}/)
-    .map((p) => p.replace(/\s+/g, " ").trim())
-    .filter(Boolean)
-    .join("\n\n");
+  const lines = String(caption || "").replace(/\r/g, "").replace(HASHTAG_RE, "").split("\n");
+  const paras = [];
+  let cur = [];
+  const flush = () => {
+    const t = cur.join(" ").replace(/\s+/g, " ").trim();
+    if (t) paras.push(t);
+    cur = [];
+  };
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (SEPARATOR_LINE.test(line)) {
+      flush();
+    } else if (ROBOT_LINE.test(line) || isKeywordList(line)) {
+      flush();
+      cur.push(line);
+      flush();
+    } else {
+      cur.push(line);
+    }
+  }
+  flush();
+  return paras.join("\n\n");
 }
 
 const ABBR = /\b(?:Dr|Mr|Mrs|Ms|Prof|St|vs|Jr|Sr|Inc|Ltd|etc|e\.g|i\.e)\.$/i;

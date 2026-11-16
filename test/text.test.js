@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { brand, splitCaption, slugify, uniqueSlug, cleanCaption, esc, truncate } from "../src/text.js";
+import { brand, splitCaption, slugify, uniqueSlug, cleanCaption, esc, truncate, isKeywordList } from "../src/text.js";
 
 test("brand writes Therapy with a capital T and removes redacted names", () => {
   assert.equal(brand("What makes therapy, therapy; is THERAPY."), "What makes Therapy, Therapy; is Therapy.");
@@ -52,4 +52,28 @@ test("esc and truncate", () => {
   assert.equal(esc(`<a href="x">'&'</a>`), "&lt;a href=&quot;x&quot;&gt;&#39;&amp;&#39;&lt;/a&gt;");
   assert.equal(truncate("short", 10), "short");
   assert.ok(truncate("alpha beta gamma delta", 14).endsWith("…"));
+});
+
+test("cleanCaption puts the ChatBots vs Human-Therapist line on its own paragraph", () => {
+  const raw = "From Steph @stephhodginsmay\n.\n.\n.\n.\n🤖 ChatBots vs Human-Therapist ♥\n\nIf you’re considering Therapy, look for \nThe Number One Ingredient. #tag";
+  assert.equal(
+    cleanCaption(raw),
+    "From Steph @stephhodginsmay\n\n🤖 ChatBots vs Human-Therapist ♥\n\nIf you’re considering Therapy, look for The Number One Ingredient.",
+  );
+  // directly after a sentence, with no spacer lines
+  assert.equal(cleanCaption("Great video.\n🤖 “AI” ChatBots vs Human-Therapist ♥\nNext line."), "Great video.\n\n🤖 “AI” ChatBots vs Human-Therapist ♥\n\nNext line.");
+  // a robot emoji elsewhere in a sentence is left alone
+  assert.equal(cleanCaption("People use 🤖 chatbots for Therapy."), "People use 🤖 chatbots for Therapy.");
+});
+
+test("cleanCaption keeps keyword lists in their own paragraph", () => {
+  const raw = "Last sentence of the story.\nkeep therapy human | healing is human | human connection heals\nTherapists of IG | Therapy Tok | Mental Health";
+  const out = cleanCaption(raw).split("\n\n");
+  assert.equal(out.length, 3);
+  assert.ok(isKeywordList(out[1]) && isKeywordList(out[2]) && !isKeywordList(out[0]));
+});
+
+test("isKeywordList needs at least two separators", () => {
+  assert.equal(isKeywordList("a | b"), false);
+  assert.equal(isKeywordList("a | b | c"), true);
 });

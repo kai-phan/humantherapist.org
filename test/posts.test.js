@@ -27,6 +27,15 @@ test("classify sends a video matching both lists to the tie-break category", () 
   assert.deepEqual(classify("#aitherapy #keeptherapyhuman", null, {}, TAGS, "ai"), ["ai"]);
 });
 
+test("an explicit tag decides the category even when fallback tags disagree", () => {
+  const EXPLICIT = { ai: ["aiharms"], human: ["humantherapist"] };
+  assert.deepEqual(classify("#AIHarms #keeptherapyhuman", null, {}, TAGS, "human", EXPLICIT), ["ai"]);
+  assert.deepEqual(classify("#humantherapist #aitherapy", null, {}, TAGS, "ai", EXPLICIT), ["human"]);
+  assert.deepEqual(classify("#aiharms #humantherapist", null, {}, TAGS, "human", EXPLICIT), ["human"]);
+  assert.deepEqual(classify("#keeptherapyhuman", null, {}, TAGS, "human", EXPLICIT), ["human"]);
+  assert.deepEqual(classify("#aiharmsfoo", null, {}, TAGS, "human", EXPLICIT), []);
+});
+
 test("overrides win over hashtags", () => {
   assert.deepEqual(classify("#aitherapy", "ABC", { ABC: "human" }, TAGS, "human"), ["human"]);
   assert.deepEqual(classify("#aitherapy", "ABC", { ABC: "hide" }, TAGS, "human"), []);

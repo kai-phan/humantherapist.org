@@ -48,7 +48,7 @@ async function videoPage(request, url, env) {
 
   const cat = video.categories[0];
   const related = videos.filter((v) => v.id !== video.id && v.categories.includes(cat)).slice(0, 8);
-  return new Response(request.method === "HEAD" ? null : renderVideoPage(video, related), {
+  return new Response(request.method === "HEAD" ? null : renderVideoPage(video, related, env.INSTAGRAM_URL || undefined), {
     headers: { "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=300", "x-content-type-options": "nosniff" },
   });
 }

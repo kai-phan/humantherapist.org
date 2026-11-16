@@ -1,4 +1,4 @@
-import { TAGS, OVERRIDES, TIE_BREAK } from "./config.js";
+import { EXPLICIT, TAGS, OVERRIDES, TIE_BREAK } from "./config.js";
 import { hashtagSet, splitCaption, brand } from "./text.js";
 
 const SHORTCODE_RE = /\/(?:p|reel|reels|tv)\/([A-Za-z0-9_-]+)/;
@@ -16,15 +16,23 @@ const httpsUrl = (u) => {
   }
 };
 
-/** Returns an array of "ai" / "human", or [] when the video should not be shown. */
-export function classify(caption, code, overrides = OVERRIDES, tags = TAGS, tieBreak = TIE_BREAK) {
+const match = (found, lists) => Object.keys(lists).filter((cat) => lists[cat].some((t) => found.has(t)));
+
+/**
+ * Returns an array of "ai" / "human", or [] when the video should not be shown.
+ * Order: manual override, then explicit tags (#aiharms ...), then the fallback tag lists.
+ */
+export function classify(caption, code, overrides = OVERRIDES, tags = TAGS, tieBreak = TIE_BREAK, explicit = EXPLICIT) {
   const o = code && overrides[code];
   if (o === "hide") return [];
   if (o === "both") return ["ai", "human"];
   if (o === "ai" || o === "human") return [o];
   const found = hashtagSet(caption);
-  const hits = Object.keys(tags).filter((cat) => tags[cat].some((t) => found.has(t)));
-  return hits.length > 1 ? [tieBreak] : hits;
+  for (const lists of [explicit, tags]) {
+    const hits = match(found, lists);
+    if (hits.length) return hits.length > 1 ? [tieBreak] : hits;
+  }
+  return [];
 }
 
 /**
