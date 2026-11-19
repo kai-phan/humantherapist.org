@@ -12,6 +12,8 @@ export const AI_TAG = "aiharms";
 // `node scripts/scan-instagram-tags.mjs` after the client tags more reels. Reels tagged after the
 // scan are picked up from Zernio automatically.
 export const OVERRIDES = {
+  // Not tagged on Instagram yet, but an AI harm video.
+  "DeqOjCphfqW": "ai",
   "DfxQcyWhdvi": "ai",
   "Dflk8NLBRq6": "ai",
   "DffHqYwhnH_": "ai",
