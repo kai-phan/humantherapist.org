@@ -1,7 +1,7 @@
 import { LABELS, SITE, IG_HANDLE } from "./config.js";
 import { esc, jsonForScript, truncate, isKeywordList } from "./text.js";
 
-const CATEGORY_PAGE = { ai: "/ai-harms/", human: "/therapeutic-relationship/" };
+const CATEGORY_PAGE = { ai: "/ai-harms/", human: "/therapeutic-relationship/", therapists: "/for-human-therapists/" };
 
 const HEADER = `  <header class="site-header">
     <div class="wrap">
@@ -9,7 +9,7 @@ const HEADER = `  <header class="site-header">
       <nav class="nav" aria-label="Main">
         <a href="/ai-harms/">🤖 AI Therapy?</a>
         <a href="/therapeutic-relationship/">The Therapeutic Relationship ❤️</a>
-        <a class="btn-join" href="/#join">For Therapists</a>
+        <a class="btn-join" href="/for-human-therapists/">For Therapists</a>
       </nav>
     </div>
   </header>`;
@@ -120,7 +120,7 @@ ${FOOTER}
 }
 
 export function renderSitemap(videos) {
-  const urls = ["/", "/therapeutic-relationship/", "/ai-harms/", ...videos.map((v) => v.url)];
+  const urls = ["/", "/therapeutic-relationship/", "/ai-harms/", "/for-human-therapists/", ...videos.map((v) => v.url)];
   const body = urls.map((u) => `  <url><loc>${esc(SITE + u)}</loc></url>`).join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
 }

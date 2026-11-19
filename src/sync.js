@@ -1,4 +1,5 @@
-import { MAX_NEW_PER_RUN, MAX_VIDEO_BYTES, MAX_ZERNIO_PAGES } from "./config.js";
+import { MAX_NEW_PER_RUN, MAX_VIDEO_BYTES, MAX_ZERNIO_PAGES, TAG_CHECKS_PER_RUN, TAG_RECHECK_MS } from "./config.js";
+import { fetchIgTags } from "./instagram.js";
 import { toVideo, classify } from "./posts.js";
 import { splitCaption, uniqueSlug } from "./text.js";
 import { readIndex, writeIndex, videoKey, posterKey } from "./store.js";
@@ -95,6 +96,9 @@ export async function sync(env, { maxNew = MAX_NEW_PER_RUN } = {}) {
       const slug = uniqueSlug(splitCaption(v.caption).title, v.id, taken);
       taken.add(slug);
       const entry = { id: v.id, slug, caption: v.caption, poster, bytes, publishedAt: v.publishedAt };
+      const tags = await fetchIgTags(v.id);
+      if (tags) entry.tags = tags;
+      entry.tagsAt = Date.now();
       index.videos.push(entry);
       byId.set(v.id, entry);
       added++;
@@ -105,8 +109,24 @@ export async function sync(env, { maxNew = MAX_NEW_PER_RUN } = {}) {
       console.error(`copy failed for ${v.id}: ${e.message}`);
     }
   }
+  // Read the current hashtags from Instagram for the entries checked longest ago.
+  const now = Date.now();
+  const due = index.videos
+    .filter((e) => !e.tagsAt || now - e.tagsAt > TAG_RECHECK_MS)
+    .sort((a, b) => (a.tagsAt || 0) - (b.tagsAt || 0))
+    .slice(0, TAG_CHECKS_PER_RUN);
+  let tagged = 0;
+  for (const e of due) {
+    const tags = await fetchIgTags(e.id);
+    if (tags) {
+      if (JSON.stringify(tags) !== JSON.stringify(e.tags)) tagged++;
+      e.tags = tags;
+    }
+    e.tagsAt = now;
+    changed = true;
+  }
   if (changed) await writeIndex(env, index);
-  const result = { added, failed, pending, total: index.videos.length };
+  const result = { added, failed, pending, tagsChecked: due.length, tagsChanged: tagged, total: index.videos.length };
   console.log("sync done", JSON.stringify(result));
   return result;
 }

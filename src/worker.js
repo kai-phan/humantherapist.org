@@ -4,7 +4,7 @@ import { sync } from "./sync.js";
 import { serveMedia } from "./media.js";
 import { renderVideoPage, renderSitemap } from "./pages.js";
 
-const CATEGORIES = new Set(["ai", "human", "all"]);
+const CATEGORIES = new Set(["ai", "human", "therapists", "all"]);
 
 const json = (body, status = 200, cache = "no-store") =>
   new Response(JSON.stringify(body), {

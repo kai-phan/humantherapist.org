@@ -1,4 +1,4 @@
-import { AI_TAG, OVERRIDES } from "./config.js";
+import { AI_TAG, THERAPISTS_TAG, OVERRIDES } from "./config.js";
 import { hashtagSet, splitCaption, brand } from "./text.js";
 
 const SHORTCODE_RE = /\/(?:p|reel|reels|tv)\/([A-Za-z0-9_-]+)/;
@@ -17,15 +17,20 @@ const httpsUrl = (u) => {
 };
 
 /**
- * Returns the categories of a video: ["ai"] when the caption has the AI hashtag, otherwise ["human"].
- * A manual override (by Instagram shortcode) wins: "ai" | "human" | "both" | "hide".
+ * Returns the categories of a video: ["ai"] for #aiharms, ["therapists"] for #fortherapists,
+ * otherwise ["human"]. #aiharms wins when both are present.
+ * Order: manual override, then the hashtags read from Instagram (igTags), then the Zernio caption.
+ * A manual override (by Instagram shortcode) wins: "ai" | "human" | "therapists" | "both" | "hide".
  */
-export function classify(caption, code, overrides = OVERRIDES, aiTag = AI_TAG) {
+export function classify(caption, code, overrides = OVERRIDES, aiTag = AI_TAG, therapistsTag = THERAPISTS_TAG, igTags = null) {
   const o = code && overrides[code];
   if (o === "hide") return [];
   if (o === "both") return ["ai", "human"];
-  if (o === "ai" || o === "human") return [o];
-  return hashtagSet(caption).has(aiTag) ? ["ai"] : ["human"];
+  if (o === "ai" || o === "human" || o === "therapists") return [o];
+  // Instagram's own tags come first; the Zernio caption is only the fallback.
+  const tags = Array.isArray(igTags) ? new Set(igTags) : hashtagSet(caption);
+  if (tags.has(aiTag)) return ["ai"];
+  return tags.has(therapistsTag) ? ["therapists"] : ["human"];
 }
 
 /**
@@ -56,7 +61,7 @@ export function toVideo(p) {
 
 /** Public, display-ready shape. Never exposes the Instagram URL, the date or source URLs. */
 export function present(entry) {
-  const categories = classify(entry.caption, entry.id);
+  const categories = classify(entry.caption, entry.id, OVERRIDES, AI_TAG, THERAPISTS_TAG, entry.tags);
   if (!categories.length) return null;
   const { title, body } = splitCaption(entry.caption);
   return {

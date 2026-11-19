@@ -22,6 +22,10 @@ test("only a video with #aiharms is AI Therapy?; every other video is Human-Ther
   assert.deepEqual(classify("x #aitherapy #chatgpt", null, {}, AI), ["human"]);
   assert.deepEqual(classify("no tags at all", null, {}, AI), ["human"]);
   assert.deepEqual(classify("x #humantherapist", null, {}, AI), ["human"]);
+  assert.deepEqual(classify("x #ForTherapists", null, {}, AI), ["therapists"]);
+  assert.deepEqual(classify("x #fortherapists #aiharms", null, {}, AI), ["ai"]);
+  assert.deepEqual(classify("x #fortherapistsfoo", null, {}, AI), ["human"]);
+  assert.deepEqual(classify("plain", "ABC", { ABC: "therapists" }, AI), ["therapists"]);
 });
 
 test("the AI tag must match the whole hashtag", () => {
@@ -80,4 +84,21 @@ test("buildList sorts newest first; filterByCategory filters and limits", () => 
   assert.deepEqual(list.map((v) => v.id), ["BBB222", "CCC333", "AAA111"]);
   assert.deepEqual(filterByCategory(list, "human", 10).map((v) => v.id), ["CCC333"]);
   assert.equal(filterByCategory(list, "all", 2).length, 2);
+});
+
+import { parseTags } from "../src/instagram.js";
+
+test("classify prefers the Instagram tags over the Zernio caption", () => {
+  assert.deepEqual(classify("old caption", null, {}, "aiharms", "fortherapists", ["aiharms"]), ["ai"]);
+  assert.deepEqual(classify("#aiharms", null, {}, "aiharms", "fortherapists", ["fortherapists"]), ["therapists"]);
+  assert.deepEqual(classify("#aiharms", null, {}, "aiharms", "fortherapists", []), ["human"]);
+  assert.deepEqual(classify("#aiharms", null, {}, "aiharms", "fortherapists", null), ["ai"]);
+  assert.deepEqual(classify("#aiharms", "X", { X: "human" }, "aiharms", "fortherapists", ["aiharms"]), ["human"]);
+});
+
+test("parseTags reads hashtags from the embed page and ignores pages without a caption", () => {
+  const html = '<div class="Caption"><a href="/explore/tags/AIHarms/">#AIHarms</a> <a href="/explore/tags/chatgpt/">#chatgpt</a></div>';
+  assert.deepEqual(parseTags(html), ["aiharms", "chatgpt"]);
+  assert.equal(parseTags('<div class="EmbedBrokenMedia"></div>'), null);
+  assert.deepEqual(parseTags('<div class="Caption">no tags</div>'), []);
 });

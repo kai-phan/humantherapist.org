@@ -1,5 +1,5 @@
 (() => {
-  const LABEL = { ai: "AI Therapy?", human: "Human-Therapist" };
+  const LABEL = { ai: "AI Therapy?", human: "Therapeutic Relationship", therapists: "Human-Therapist" };
 
   const el = (tag, cls, text) => {
     const n = document.createElement(tag);
