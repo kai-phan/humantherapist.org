@@ -84,7 +84,10 @@ export function buildList(entries) {
     .sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)));
 }
 
-export function filterByCategory(videos, category, limit) {
-  const list = category === "all" ? videos : videos.filter((v) => v.categories.includes(category));
-  return list.slice(0, limit);
+export function filterByCategory(videos, category, limit, offset = 0) {
+  return matching(videos, category).slice(offset, offset + limit);
+}
+
+export function matching(videos, category) {
+  return category === "all" ? videos : videos.filter((v) => v.categories.includes(category));
 }

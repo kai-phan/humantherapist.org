@@ -47,12 +47,41 @@
     const category = section.dataset.category || "all";
     const limit = section.dataset.limit || "12";
     const list = section.querySelector("[data-posts-list]");
+    const more = section.querySelector("[data-more]");
+    const page = (offset) =>
+      fetch(`/api/posts?category=${encodeURIComponent(category)}&limit=${encodeURIComponent(limit)}&offset=${offset}`).then((r) => (r.ok ? r.json() : null));
+    const updateMore = (data, shown) => {
+      if (!more) return;
+      more.hidden = !data.hasMore;
+      more.textContent = `Load more videos (${Math.max(data.total - shown, 0)} left)`;
+    };
     try {
-      const res = await fetch(`/api/posts?category=${encodeURIComponent(category)}&limit=${encodeURIComponent(limit)}`);
-      if (!res.ok) return;
-      const { posts, profileUrl } = await res.json();
+      const data = await page(0);
+      if (!data) return;
+      const { posts, profileUrl } = data;
       if (!posts || !posts.length) return;
       list.replaceChildren(...posts.map(card));
+      let shown = posts.length;
+      updateMore(data, shown);
+      if (more) {
+        more.addEventListener("click", async () => {
+          more.disabled = true;
+          try {
+            const next = await page(shown);
+            if (next && next.posts.length) {
+              list.append(...next.posts.map(card));
+              shown += next.posts.length;
+              updateMore(next, shown);
+            } else {
+              more.hidden = true;
+            }
+          } catch {
+            /* keep the button so the visitor can try again */
+          } finally {
+            more.disabled = false;
+          }
+        });
+      }
       section.querySelectorAll("[data-ig]").forEach((a) => {
         if (profileUrl) {
           a.href = profileUrl;

@@ -6,11 +6,12 @@ const CATEGORY_PAGE = { ai: "/ai-harms/", human: "/therapeutic-relationship/", t
 const HEADER = `  <header class="site-header">
     <div class="wrap">
       <a class="brand" href="/" aria-label="Human-Therapist.org home"><img src="/assets/logo.jpg" alt="Human Therapist" width="165" height="46"></a>
-      <nav class="nav" aria-label="Main">
+      <nav class="nav" id="site-nav" aria-label="Main">
         <a href="/ai-harms/">🤖 AI Therapy?</a>
         <a href="/therapeutic-relationship/">The Therapeutic Relationship ❤️</a>
         <a class="btn-join" href="/for-human-therapists/">For Therapists</a>
       </nav>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span></span><span></span><span></span></button>
     </div>
   </header>`;
 
@@ -114,6 +115,7 @@ ${
 }  </main>
 
 ${FOOTER}
+  <script src="/menu.js" defer></script>
 </body>
 </html>
 `;

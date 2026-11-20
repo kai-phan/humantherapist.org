@@ -84,6 +84,8 @@ test("buildList sorts newest first; filterByCategory filters and limits", () => 
   assert.deepEqual(list.map((v) => v.id), ["BBB222", "CCC333", "AAA111"]);
   assert.deepEqual(filterByCategory(list, "human", 10).map((v) => v.id), ["CCC333"]);
   assert.equal(filterByCategory(list, "all", 2).length, 2);
+  assert.deepEqual(filterByCategory(list, "all", 2, 2).map((v) => v.id), ["AAA111"]);
+  assert.deepEqual(filterByCategory(list, "all", 2, 5), []);
 });
 
 import { parseTags } from "../src/instagram.js";

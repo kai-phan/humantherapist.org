@@ -35,6 +35,7 @@ a { color: inherit; }
 .nav a:hover { color: var(--yellow); }
 .nav .btn-join { background: var(--blue); color: #fff; padding: .5rem 1rem; border-radius: 999px; }
 .nav .btn-join:hover { color: #fff; background: #4a74ff; }
+.nav-toggle { display: none; }
 
 /* Hero */
 .hero { background: var(--black); color: #fff; padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(3rem, 6vw, 5rem); overflow: hidden; }
@@ -97,9 +98,11 @@ a { color: inherit; }
 .r-ai { background: linear-gradient(160deg, #d3303a, #7d1218); }
 .r-human, .r-therapists { background: linear-gradient(160deg, #3d6bff, #1a2f8f); }
 .reel-quote { position: relative; z-index: 1; margin: 0 0 3.4rem; font-family: var(--serif); font-style: italic; font-weight: 700; font-size: clamp(1.2rem, 2vw, 1.55rem); line-height: 1.15; text-shadow: 0 1px 12px rgba(0,0,0,.25); }
-.badge { position: absolute; top: .9rem; left: .9rem; z-index: 1; background: rgba(0,0,0,.65); color: #fff; font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: .3rem .6rem; border-radius: 999px; }
-.badge--ai, .label--ai { background: var(--red); }
-.badge--human, .badge--therapists, .label--human, .label--therapists { background: var(--blue); }
+.badge { position: absolute; top: .9rem; left: .9rem; z-index: 1; background: rgba(0,0,0,.65); color: #fff; font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: .3rem .6rem; border-radius: 14px; line-height: 1.25; }
+/* Label colours: AI Therapy? = black on white text; Therapeutic Relationship = white with blue text; Human-Therapist = yellow with blue text. */
+.badge--ai, .label.label--ai { background: #000; color: #fff; }
+.badge--human, .label.label--human { background: #fff; color: var(--blue); }
+.badge--therapists, .label.label--therapists { background: var(--yellow); color: var(--blue); }
 .dur { position: absolute; top: .9rem; right: .9rem; background: rgba(0,0,0,.65); color: #fff; font-size: .75rem; font-weight: 700; padding: .25rem .5rem; border-radius: 6px; }
 .play { position: absolute; left: .9rem; bottom: .9rem; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.92); box-shadow: 0 4px 14px rgba(0,0,0,.35); }
 .play::after { content: ""; position: absolute; top: 50%; left: 56%; transform: translate(-50%, -50%); border-left: 14px solid #000; border-top: 9px solid transparent; border-bottom: 9px solid transparent; }
@@ -160,7 +163,7 @@ a { color: inherit; }
 .reels--slider .reel-cap { font-size: .9rem; }
 .reels--slider .play { width: 38px; height: 38px; left: .7rem; bottom: .7rem; }
 .reels--slider .play::after { border-left-width: 12px; border-top-width: 8px; border-bottom-width: 8px; }
-.reels--slider .badge { font-size: .62rem; top: .7rem; left: .7rem; }
+.reels--slider .badge { font-size: .6rem; letter-spacing: .03em; padding-inline: .5rem; top: .7rem; left: .7rem; right: auto; max-width: calc(100% - 1.4rem); }
 
 /* Join */
 .join { background: var(--blue); color: #fff; }
@@ -168,6 +171,11 @@ a { color: inherit; }
 .join h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.1; margin: 0 0 1rem; font-weight: 900; letter-spacing: -.02em; }
 .join p { margin: 0 0 1rem; font-size: 1.1rem; }
 .btn { display: inline-block; background: #000; color: #fff; text-decoration: none; font-weight: 800; padding: .95rem 1.6rem; border-radius: 999px; font-size: 1.05rem; }
+.load-more { text-align: center; margin-top: 2rem; }
+.btn.btn--more { background: var(--yellow); color: #000; border: 0; cursor: pointer; font-family: inherit; }
+.btn--more:hover { filter: brightness(1.08); }
+.btn--more:disabled { opacity: .6; cursor: progress; }
+.btn--more[hidden] { display: none; }
 .btn:hover { background: var(--red); }
 .join .questions { list-style: none; padding: 0; margin: 0; display: grid; gap: .8rem; }
 .join .questions li { background: #000; color: #fff; padding: 1rem 1.2rem; border-radius: var(--radius); font-weight: 700; }
@@ -228,11 +236,11 @@ a { color: inherit; }
   .vplayer { max-width: 400px; margin-inline: auto; width: 100%; }
 }
 @media (max-width: 600px) {
-  .badge { top: .55rem; left: .55rem; font-size: .58rem; padding: .22rem .5rem; letter-spacing: .06em; }
+  .badge, .reels--slider .badge { top: .5rem; left: .5rem; font-size: .5rem; padding: .2rem .45rem; letter-spacing: .03em; max-width: calc(100% - 1rem); }
   .play { left: .6rem; bottom: .6rem; width: 36px; height: 36px; }
   .play::after { border-left-width: 11px; border-top-width: 7px; border-bottom-width: 7px; }
   .reel-quote { margin-bottom: 2.8rem; font-size: 1.05rem; }
-  .label { font-size: .68rem; padding: .28rem .6rem; }
+  .label { font-size: .6rem; padding: .25rem .55rem; }
   .nav a:not(.btn-join) { display: none; }
   .grid { grid-template-columns: 1fr; }
   .reels--slider > li { flex-basis: 42%; }
@@ -246,6 +254,19 @@ a { color: inherit; }
   .card--join { flex-direction: column; }
   .card--join .cover { flex-basis: auto; min-height: 160px; }
   .ring { min-height: 280px; border-width: 9px; }
+}
+/* Phones and tablets (up to iPad landscape): the main navigation becomes a menu. */
+@media (max-width: 1024px) {
+  /* Menu button: only when menu.js is running (it adds .has-menu); otherwise the join button stays visible. */
+  .has-menu .nav-toggle { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; padding: 0 11px; background: none; border: 1px solid #333; border-radius: 10px; cursor: pointer; }
+  .has-menu .nav-toggle span { display: block; height: 2px; background: #fff; border-radius: 2px; transition: transform .2s, opacity .2s; }
+  .has-menu .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .has-menu .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .has-menu .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .has-menu .nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--black); border-bottom: 1px solid #222; padding: .3rem 1.25rem 1.1rem; box-shadow: 0 14px 24px rgba(0,0,0,.35); }
+  .has-menu .nav.open { display: flex; }
+  .has-menu .nav a:not(.btn-join) { display: block; padding: .95rem 0; border-bottom: 1px solid #222; font-size: 1.05rem; }
+  .has-menu .nav .btn-join { margin-top: 1rem; padding: .85rem 1rem; text-align: center; font-size: 1.05rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

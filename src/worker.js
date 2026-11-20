@@ -1,4 +1,4 @@
-import { buildList, filterByCategory } from "./posts.js";
+import { buildList, filterByCategory, matching } from "./posts.js";
 import { readIndex } from "./store.js";
 import { sync } from "./sync.js";
 import { serveMedia } from "./media.js";
@@ -22,13 +22,16 @@ async function apiPosts(url, env) {
   const category = url.searchParams.get("category") || "all";
   if (!CATEGORIES.has(category)) return json({ error: "invalid_category" }, 400);
   const limit = Math.min(Math.max(parseInt(url.searchParams.get("limit") || "12", 10) || 12, 1), 60);
-  const posts = filterByCategory(await allVideos(env), category, limit).map((v) => ({
+  const offset = Math.max(parseInt(url.searchParams.get("offset") || "0", 10) || 0, 0);
+  const videos = await allVideos(env);
+  const total = matching(videos, category).length;
+  const posts = filterByCategory(videos, category, limit, offset).map((v) => ({
     url: v.url,
     thumb: v.thumb,
     title: v.title,
     category: category === "all" ? v.categories[0] : category,
   }));
-  return json({ posts, profileUrl: env.INSTAGRAM_URL || "" }, 200, "public, max-age=300");
+  return json({ posts, total, hasMore: offset + posts.length < total, profileUrl: env.INSTAGRAM_URL || "" }, 200, "public, max-age=300");
 }
 
 async function videoPage(request, url, env) {
