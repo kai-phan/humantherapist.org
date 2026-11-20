@@ -9,58 +9,13 @@ export const AI_TAG = "aiharms";
 export const THERAPISTS_TAG = "fortherapists";
 
 // Manual overrides, keyed by the Instagram shortcode (instagram.com/reel/<SHORTCODE>/).
-// Takes priority over hashtags. Values: "ai" | "human" | "therapists" | "both" | "hide"
+// Values: "ai" | "human" | "therapists" | "both" | "hide"
 //
-// Priority: override, then the hashtags read from Instagram by the sync (src/instagram.js), then the Zernio
-// caption. The "ai" entries below were added before the sync read Instagram tags and are now redundant
-// where the reel still carries #aiharms on Instagram. Remove one when the client changes its tag.
+// Priority: override, then the hashtags the sync reads from Instagram (src/instagram.js), then the Zernio
+// caption. Keep this list short: an override stops the video from following the client's hashtags.
 export const OVERRIDES = {
-  // No hashtags on Instagram, but an AI harm video.
+  // Sophie / ChatGPT suicide note video. Its Instagram embed page is broken, so no hashtag can be read.
   "DeqOjCphfqW": "ai",
-  "DfxQcyWhdvi": "ai",
-  "DffHqYwhnH_": "ai",
-  "DfXL4RLh3Fh": "ai",
-  "DfRgUvEh658": "ai",
-  "DfO0aVtB8bx": "ai",
-  "DfE7YSbB0T2": "ai",
-  "De_4yx_hdB9": "ai",
-  "De3RXudB6SJ": "ai",
-  "De14ySpBede": "ai",
-  "DehZv9ThKD2": "ai",
-  "DegdWftB3P8": "ai",
-  "Dee1MtLBf0T": "ai",
-  "DecF8d1hLga": "ai",
-  "DeUj_EDBqcK": "ai",
-  "DeS1s3XhuaZ": "ai",
-  "DePQwlXB9X9": "ai",
-  "DdjgQg_humU": "ai",
-  "DdblZf8hIbd": "ai",
-  "DdbkifmBk1v": "ai",
-  "DdWzm7WB8s0": "ai",
-  "DdSbeyDhIVV": "ai",
-  "DdK0YXGB1QM": "ai",
-  "DdEdBy9hSZo": "ai",
-  "Dc_Ql15hZfv": "ai",
-  "Dc6Sz3dB1af": "ai",
-  "Dc41CSQhY3l": "ai",
-  "Dc1B_xHByu1": "ai",
-  "DcoL-VwhuOR": "ai",
-  "DclunDnBmdK": "ai",
-  "DckgaulhDpu": "ai",
-  "DceFF9yB-QX": "ai",
-  "DcXvUhshXKX": "ai",
-  "DcTmx41BLnu": "ai",
-  "Db8nHx3BLZU": "ai",
-  "Dbw79T3B3Rr": "ai",
-  "DbbGJOwhNfz": "ai",
-  "DbFMK2UhMBH": "ai",
-  "DalGcaJBh9_": "ai",
-  "DZiJEQUhgqh": "ai",
-  "DZXzkFHhID2": "ai",
-  "DZSQ5IGhhTv": "ai",
-  "DZISwEChrw_": "ai",
-  "DY-PHiThPOL": "ai",
-  "DXzUJjRBGk2": "ai",
 };
 
 // Public labels. Red label = AI, blue labels = the other two.

@@ -59,10 +59,8 @@ a { color: inherit; }
 .ring--red { --c: var(--red); border-radius: 56% 44% 52% 48% / 48% 56% 44% 52%; transform: rotate(-2deg); }
 .ring--blue { --c: var(--blue); border-radius: 46% 54% 49% 51% / 55% 45% 55% 45%; transform: rotate(2deg); }
 .ring:hover { transform: rotate(0) scale(1.02); }
-.ring .q { font-size: clamp(1.6rem, 3.4vw, 2.4rem); font-weight: 800; margin: 0 0 .8rem; }
-.ring .tag { display: inline-block; font-weight: 900; font-size: clamp(1.05rem, 2.2vw, 1.5rem); padding: .55rem 1rem; line-height: 1.15; text-transform: uppercase; }
-.ring--red .tag { background: var(--purple); color: var(--yellow); text-transform: none; }
-.ring--blue .tag { background: var(--blue); color: #fff; }
+.ring .pill { display: block; width: min(100%, 430px); height: auto; margin: 0 auto; transform: rotate(-3deg); filter: drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
+.ring--blue .pill { transform: rotate(-2deg); }
 .ring .sub { margin: 1rem 0 0; color: #d4d4d8; font-weight: 600; max-width: 28ch; }
 
 /* Sections */
@@ -221,6 +219,11 @@ a { color: inherit; }
 .next { background: #fff; border-top: 1px solid var(--line); }
 .next .wrap { padding-block: 2.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; }
 .next p { margin: 0; font-weight: 800; font-size: 1.2rem; }
+.next .wrap { justify-content: center; gap: .6rem 1.4rem; }
+.next-pill { display: flex; align-items: flex-end; gap: .5rem; text-decoration: none; }
+.next-arrow { flex: none; margin-bottom: .2rem; }
+.next-img { display: block; width: min(100%, 360px); height: auto; border-radius: 22px; transition: transform .2s; }
+.next-pill:hover .next-img { transform: scale(1.03) rotate(-1deg); }
 
 /* Footer */
 .site-footer { background: var(--black); color: #b6b6bd; padding: 2.5rem 0; font-size: .95rem; }
@@ -263,6 +266,9 @@ a { color: inherit; }
   .card--join { flex-direction: column; }
   .card--join .cover { flex-basis: auto; min-height: 160px; }
   .ring { min-height: 280px; border-width: 9px; }
+  .next .wrap { flex-direction: column; text-align: center; }
+  .next-pill { flex-direction: column; align-items: center; }
+  .next-arrow { transform: rotate(75deg); margin: 0 0 -.2rem; }
 }
 /* Phones and tablets (up to iPad landscape): the main navigation becomes a menu. */
 @media (max-width: 1024px) {
